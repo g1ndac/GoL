@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package GoL.framework;
 
 import java.util.Arrays;
@@ -19,6 +14,7 @@ public class Engine {
 
     public Engine(int dim) {
         currentField = new byte[dim][dim];
+        nextField = new byte[dim][dim];
         this.dim = dim;
 
     }
@@ -46,22 +42,183 @@ public class Engine {
     }
 
     public byte neighbourCount(int i, int j) {
-        if         ((i == 0 && j == 0)
-                || (i == 0 && j == (dim - 1))
-                || ((i == dim - 1) && (j == dim - 1))
-                || (i == (dim - 1) && j == 0)) {
-            
+        byte count = 0;
+        if (i == 0 && j == 0) {
+            if (currentField[i + 1][j] == 1) {
+                count++;
+            }
+            if (currentField[i][j + 1] == 1) {
+                count++;
+            }
+            if (currentField[i + 1][j + 1] == 1) {
+                count++;
+            }
+        } else if (i == 0 && j == (dim - 1)) {
+            if (currentField[i][j - 1] == 1) {
+                count++;
+            }
+            if (currentField[i + 1][j - 1] == 1) {
+                count++;
+            }
+            if (currentField[i + 1][j] == 1) {
+                count++;
+            }
+
+        } else if ((i == dim - 1) && (j == dim - 1)) {
+            if (currentField[i - 1][j - 1] == 1) {
+                count++;
+            }
+            if (currentField[i - 1][j] == 1) {
+                count++;
+            }
+            if (currentField[i][j - 1] == 1) {
+                count++;
+            }
+        } else if (i == (dim - 1) && j == 0) {
+            if (currentField[i - 1][j] == 1) {
+                count++;
+            }
+            if (currentField[i - i][j + 1] == 1) {
+                count++;
+            }
+            if (currentField[i][j + 1] == 1) {
+                count++;
+            }
+        } else if (i == 0 && j > 0 && j < (dim - 1)) {
+            if (currentField[i][j - 1] == 1) {
+                count++;
+            }
+            if (currentField[i][j + 1] == 1) {
+                count++;
+            }
+            if (currentField[i + 1][j + 1] == 1) {
+                count++;
+            }
+            if (currentField[i + 1][j] == 1) {
+                count++;
+            }
+            if (currentField[i + 1][j - 1] == 1) {
+                count++;
+            }
+        } else if (i == (dim - 1) && j > 0 && j < (dim - 1)) {
+            if (currentField[i][j - 1] == 1) {
+                count++;
+            }
+            if (currentField[i][j + 1] == 1) {
+                count++;
+            }
+            if (currentField[i - 1][j + 1] == 1) {
+                count++;
+            }
+            if (currentField[i - 1][j] == 1) {
+                count++;
+            }
+            if (currentField[i - 1][j - 1] == 1) {
+                count++;
+            }
+        } else if (j == 0 && i > 0 && i < (dim - 1)) {
+            if (currentField[i - 1][j] == 1) {
+                count++;
+            }
+            if (currentField[i + 1][j] == 1) {
+                count++;
+            }
+            if (currentField[i - 1][j + 1] == 1) {
+                count++;
+            }
+            if (currentField[i][j + 1] == 1) {
+                count++;
+            }
+            if (currentField[i + 1][j + 1] == 1) {
+                count++;
+            }
+        } else if (j == (dim - 1) && i > 0 && i < (dim - 1)) {
+            if (currentField[i - 1][j] == 1) {
+                count++;
+            }
+            if (currentField[i + 1][j] == 1) {
+                count++;
+            }
+            if (currentField[i - 1][j - 1] == 1) {
+                count++;
+            }
+            if (currentField[i][j - 1] == 1) {
+                count++;
+            }
+            if (currentField[i + 1][j - 1] == 1) {
+                count++;
+            }
+        } else {
+            if (currentField[i - 1][j - 1] == 1) {
+                count++;
+            }
+            if (currentField[i - 1][j] == 1) {
+                count++;
+            }
+            if (currentField[i - 1][j + 1] == 1) {
+                count++;
+            }
+            if (currentField[i][j + 1] == 1) {
+                count++;
+            }
+            if (currentField[i + 1][j + 1] == 1) {
+                count++;
+            }
+            if (currentField[i + 1][j] == 1) {
+                count++;
+            }
+            if (currentField[i + 1][j - 1] == 1) {
+                count++;
+            }
+            if (currentField[i][j - 1] == 1) {
+                count++;
+            }
+
         }
+
+        return count;
+    }
+
+    public void setStatus(int i, int j) {
+        if (neighbourCount(i, j) <= 1) {
+            nextField[i][j] = 0;
+        } else if (neighbourCount(i, j) == 2 && currentField[i][j] == 1) {
+            nextField[i][j] = 1;
+        } else if (neighbourCount(i, j) == 3) {
+            nextField[i][j] = 1;
+        } else if (neighbourCount(i, j) > 3) {
+            nextField[i][j] = 0;
+        }
+    }
+
+    public void oneTurn() {
+        int i, j;
+        for (i = 0; i < dim; i++) {
+            for (j = 0; j < dim; j++) {
+                setStatus(i, j);
+            }
+        }
+        currentField = nextField;
+        printField();
+
     }
 
     public static void main(String[] args) {
 
         Engine en = new Engine(10);
-        int[] values = {1};
+        int[] values = {2,7,13,21,23,94,95,66,71,8,1,45,46,55,31,34,66,56};
         en.setValues(values);
         en.printField();
-        en.setValue(10);
-        en.printField();
+        en.oneTurn();
+        en.oneTurn();
+        en.oneTurn();
+        en.oneTurn();
+        en.oneTurn();
+        en.oneTurn();
+        en.oneTurn();
+        en.oneTurn();
+        en.oneTurn();
+        en.oneTurn();
 
     }
 
