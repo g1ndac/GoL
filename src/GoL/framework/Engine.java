@@ -184,6 +184,8 @@ public class Engine {
             nextField[i][j] = 0;
         } else if (neighbourCount(i, j) == 2 && currentField[i][j] == 1) {
             nextField[i][j] = 1;
+        } else if (neighbourCount(i, j) == 2 && currentField[i][j] == 0) {
+            nextField[i][j] = 0;
         } else if (neighbourCount(i, j) == 3) {
             nextField[i][j] = 1;
         } else if (neighbourCount(i, j) > 3) {
@@ -198,7 +200,13 @@ public class Engine {
                 setStatus(i, j);
             }
         }
-        currentField = nextField;
+
+        for (i = 0; i < dim; i++) {
+            for (j = 0; j < dim; j++) {
+                currentField[i][j] = nextField[i][j];
+            }
+        }
+
         printField();
 
     }
@@ -206,9 +214,11 @@ public class Engine {
     public static void main(String[] args) {
 
         Engine en = new Engine(10);
-        int[] values = {2,7,13,21,23,94,95,66,71,8,1,45,46,55,31,34,66,56};
+        int[] values = {44, 55, 56,46,36};
         en.setValues(values);
         en.printField();
+        en.oneTurn();
+        en.oneTurn();
         en.oneTurn();
         en.oneTurn();
         en.oneTurn();
